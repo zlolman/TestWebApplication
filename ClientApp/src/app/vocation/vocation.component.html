@@ -1,0 +1,26 @@
+<h1>Список оформленных отпусков сотрудников</h1>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <td>Имя сотрудника</td>
+      <td>Дата начала</td>
+      <td>Дата конца</td>
+      <td></td>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr *ngFor="let p of list">
+        <td>{{p.emp.name}}</td>
+        <td>{{p.voc.startDate | date:"dd/MM/yyyy"}}</td>
+        <td>{{p.voc.endDate | date:"dd/MM/yyyy"}}</td>
+        <td>
+          <button class="btn btn-sm btn-danger" (click)="delete(p.voc)">Удалить</button>
+        </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+

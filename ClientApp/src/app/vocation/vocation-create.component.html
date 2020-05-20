@@ -1,0 +1,14 @@
+<h2>Оформление отпуска</h2>
+<div class="form-group">
+  <label>Дата начала</label>
+  <input type="date" [(ngModel)]="vocation.startdate" class="form-control"/>
+</div>
+<div class="form-group">
+  <label>Дата конца</label>
+  <input type="date" [(ngModel)]="vocation.enddate" class="form-control"/>
+</div>
+  <div>
+    <input type="button" value="Сохранить" (click)="save()" class="btn btn-success" />
+    <a routerLink="/employee" class="btn btn-warning">Отмена</a>
+  </div>
+
