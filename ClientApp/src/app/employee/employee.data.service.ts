@@ -19,13 +19,13 @@ export class EmployeeDataService {
     return this.http.get(this.url + '/' + id).pipe(retry(1));
   }
 
-  createEmployee(employee: Employee) {
-    return this.http.post(this.url, employee);
+  createEmployee(employee: Employee): Observable<Employee> {
+    return this.http.post(this.url, employee).pipe(retry(1));
   }
-  updateEmployee(employee: Employee) {
-    return this.http.put(this.url, employee);
+  updateEmployee(employee: Employee): Observable<Employee> {
+    return this.http.put(this.url, employee).pipe(retry(1));
   }
-  deleteEmployee(id: number) {
-    return this.http.delete(this.url + '/' + id);
+  deleteEmployee(id: number): Observable<Employee> {
+    return this.http.delete(this.url + '/' + id).pipe(retry(1));
   }
 }

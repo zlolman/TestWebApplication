@@ -1,11 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TestWebApplication.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace TestWebApplication.Controllers
 {
@@ -24,11 +22,11 @@ namespace TestWebApplication.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Vocation> Get()
+        public async Task<ActionResult<IEnumerable<Vocation>>> Get()
         {
             try
             {
-                return db.Vocations.ToList();
+                return await db.Vocations.ToListAsync();
 
             }
             catch
@@ -38,7 +36,7 @@ namespace TestWebApplication.Controllers
         }
 
         [HttpGet("{id}")]
-        public Vocation Get(int id)
+        public async Task<ActionResult<Vocation>> Get(int id)
         {
             try
             {
@@ -50,7 +48,7 @@ namespace TestWebApplication.Controllers
                 throw;
             }
 
-        }       
+        }
 
         [HttpPost]
         public async Task<ActionResult<Vocation>> Post(Vocation vocation)
@@ -65,7 +63,7 @@ namespace TestWebApplication.Controllers
                         await db.SaveChangesAsync();
                         return Ok(vocation);
                     }
-                    else 
+                    else
                     {
                         return BadRequest(ModelState);
                     }
@@ -80,14 +78,14 @@ namespace TestWebApplication.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put(Vocation vocation)
+        public async Task<ActionResult> Put(Vocation vocation)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     db.Update(vocation);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                     return Ok(vocation);
                 }
                 return BadRequest(ModelState);
@@ -99,7 +97,7 @@ namespace TestWebApplication.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
@@ -107,7 +105,7 @@ namespace TestWebApplication.Controllers
                 if (vocation != null)
                 {
                     db.Vocations.Remove(vocation);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 return Ok(vocation);
             }
@@ -116,6 +114,6 @@ namespace TestWebApplication.Controllers
                 throw;
             }
         }
-        
+
     }
 }
