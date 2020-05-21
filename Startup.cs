@@ -24,7 +24,7 @@ namespace TestWebApplication
 
             services.AddControllersWithViews();
 
-            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(employeeConnectionString));
+            services.AddDbContext<EmployeeContext>(options => options.UseSqlServer(employeeConnectionString));
             services.AddDbContext<VocationContext>(options => options.UseSqlServer(vocationConnectionString));
 
             services.AddSpaStaticFiles(configuration =>

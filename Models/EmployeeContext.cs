@@ -2,9 +2,9 @@
 
 namespace TestWebApplication.Models
 {
-    public class ApplicationContext : DbContext
+    public class EmployeeContext : DbContext
     {
-        public ApplicationContext(DbContextOptions<ApplicationContext> options)
+        public EmployeeContext(DbContextOptions<EmployeeContext> options)
             : base(options)
         {
             Database.EnsureCreated();

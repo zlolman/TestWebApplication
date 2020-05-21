@@ -11,11 +11,11 @@ namespace TestWebApplication.Controllers
     [Route("/employee")]
     public class EmployeeController : ControllerBase
     {
-        ApplicationContext db;
+        EmployeeContext employeeDb;
         VocationContext vocationDb;
-        public EmployeeController(ApplicationContext context, VocationContext vocationContext)
+        public EmployeeController(EmployeeContext context, VocationContext vocationContext)
         {
-            db = context;
+            employeeDb = context;
             vocationDb = vocationContext;
 
         }
@@ -25,7 +25,7 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                return await db.Employees.ToListAsync();
+                return await employeeDb.Employees.ToListAsync();
             }
             catch
             {
@@ -39,7 +39,7 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                Employee employee = await db.Employees.FindAsync(id);
+                Employee employee = await employeeDb.Employees.FindAsync(id);
                 return employee;
             }
             catch
@@ -56,9 +56,9 @@ namespace TestWebApplication.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    db.Employees.Add(employee);
+                    employeeDb.Employees.Add(employee);
                     //db.SaveChanges();
-                    await db.SaveChangesAsync();
+                    await employeeDb.SaveChangesAsync();
                     return Ok(employee);
                 }
                 return BadRequest(ModelState);
@@ -77,8 +77,8 @@ namespace TestWebApplication.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    db.Update(employee);
-                    await db.SaveChangesAsync();
+                    employeeDb.Update(employee);
+                    await employeeDb.SaveChangesAsync();
                     return Ok(employee);
                 }
                 return BadRequest(ModelState);
@@ -94,19 +94,19 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                Employee employee = db.Employees.FirstOrDefault(x => x.id == id);
+                Employee employee = employeeDb.Employees.FirstOrDefault(x => x.id == id);
 
                 if (employee != null)
                 {
                     List<Vocation> vocations = new List<Vocation>();
                     vocations.AddRange(vocationDb.Vocations.Where(voc => voc.employeeId == employee.id));
-                    db.Employees.Remove(employee);
+                    employeeDb.Employees.Remove(employee);
                     foreach (Vocation voc in vocations)
                     {
                         vocationDb.Vocations.Remove(voc);
                     }
                     await vocationDb.SaveChangesAsync();
-                    await db.SaveChangesAsync();
+                    await employeeDb.SaveChangesAsync();
 
                 }
                 return Ok(employee);

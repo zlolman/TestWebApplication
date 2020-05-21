@@ -7,7 +7,7 @@ namespace TestWebApplication.Controllers
 {
     public static class AddVocationCheck
     {
-        static int CountVocations(string position, Vocation vocation, ApplicationContext employeeDb, VocationContext vocationDb)
+        static int CountVocations(string position, Vocation vocation, EmployeeContext employeeDb, VocationContext vocationDb)
         {
             int count = 0;
             if (vocationDb.Vocations.Any())
@@ -97,12 +97,12 @@ namespace TestWebApplication.Controllers
                 return false;
             }
         }
-        static string FindEMployeePosition(Vocation vocation, ApplicationContext employeeDb)
+        static string FindEMployeePosition(Vocation vocation, EmployeeContext employeeDb)
         {
             return employeeDb.Employees
                 .FirstOrDefault(x => x.id == vocation.employeeId).position;
         }
-        static public bool Check(Vocation vocation, ApplicationContext employeeDb, VocationContext vocationDb)
+        static public bool Check(Vocation vocation, EmployeeContext employeeDb, VocationContext vocationDb)
         {
             if ((CheckValidDate(vocation))
                 && (CheckDaysPerYear(vocation, vocationDb)))
