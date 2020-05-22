@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TestWebApplication.Models;
 using TestWebApplication.Data;
+using TestWebApplication.Services;
 
 namespace TestWebApplication
 {
@@ -28,6 +29,8 @@ namespace TestWebApplication
             services.AddDbContext<EmployeeContext>(options => options.UseSqlServer(employeeConnectionString));
             services.AddDbContext<VocationContext>(options => options.UseSqlServer(vocationConnectionString));
 
+            services.AddTransient<AddVocationCheckService>()
+                ;
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
@@ -36,6 +39,7 @@ namespace TestWebApplication
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

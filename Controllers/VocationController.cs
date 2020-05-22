@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using TestWebApplication.Models;
 using Microsoft.EntityFrameworkCore;
 using TestWebApplication.Data;
-
+using TestWebApplication.Services;
 namespace TestWebApplication.Controllers
 {
     [ApiController]
@@ -14,10 +14,12 @@ namespace TestWebApplication.Controllers
     {
         VocationContext vocationDb;
         EmployeeContext employeeDb;
-        public VocationController(VocationContext vocationContext, EmployeeContext employeeContext)
+        AddVocationCheckService addService;
+        public VocationController(VocationContext vocationContext, EmployeeContext employeeContext, AddVocationCheckService service)
         {
             vocationDb = vocationContext;
             employeeDb = employeeContext;
+            addService = service;
             vocationDb.SaveChanges();
             employeeDb.SaveChanges();
         }
@@ -58,7 +60,7 @@ namespace TestWebApplication.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (AddVocationCheck.Check(vocation, employeeDb, vocationDb))
+                    if (addService.Check(vocation, employeeDb, vocationDb))
                     {
                         vocationDb.Vocations.Add(vocation);
                         await vocationDb.SaveChangesAsync();
