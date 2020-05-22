@@ -21,7 +21,7 @@ namespace TestWebApplication
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=qwerty;Trusted_Connection=True;";
+            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=qwerty;Trusted_Connection=True;MultipleActiveResultSets=true;";
             //string vocationConnectionString = "Server=(localdb)\\mssqllocaldb;Database=vocDbne;Trusted_Connection=True;MultipleActiveResultSets=true;";
             //MultipleActiveResultSets=true;
             services.AddControllersWithViews();
