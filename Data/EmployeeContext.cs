@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TestWebApplication.Models;
 
 namespace TestWebApplication.Models
 {
