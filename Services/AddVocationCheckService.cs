@@ -10,8 +10,8 @@ namespace TestWebApplication.Services
     public class AddVocationCheckService
     {
         private Vocation vocation;
-        private EmployeeContext employeeDb;
-        private VocationContext vocationDb;
+        private ApplicationContext Db;
+        //private VocationContext vocationDb;
         const int MAX_DAYS_PER_YEAR = 28;
         private bool CheckValidDate() //проверка данных отпуска, startData < endDate, startDat >= today
         {
@@ -30,15 +30,14 @@ namespace TestWebApplication.Services
         private int CountVocations(string position) //нахождение количесства пересечений по датам для позиции
         {
             int count = 0;
-            if (vocationDb.Vocations.Any())
+            if (Db.Vocations.Any())
             {
-                IEnumerable<Employee> employees = employeeDb.Employees
+                IEnumerable<Employee> employees = Db.Employees
                     .Where(emp => emp.position.Equals(position)); // фильтрация сотрудников по позиции в базе сотрудников
                 List<Vocation> vocations = new List<Vocation>();
                 foreach (var emp in employees)
                 {
-                    vocations.AddRange(vocationDb.Vocations         //фильтрация отпусков по позиции в базе отпусков
-                        .Where(voc => voc.employeeId == emp.id)); 
+                    vocations.AddRange(Db.Vocations.Where(voc => voc.employeeId == emp.id));//фильтрация отпусков по позиции в базе отпусков
                 }
                 foreach (var voc in vocations)
                 {
@@ -65,7 +64,7 @@ namespace TestWebApplication.Services
 
         private bool CheckDaysPerYear() //проверка количества отпускных дней для сотрудника, <=28
         {
-            IEnumerable<Vocation> vocations = vocationDb.Vocations
+            IEnumerable<Vocation> vocations = Db.Vocations
                 .Where(voc => voc.employeeId == vocation.employeeId); //вывод ранее оформленных отпусков для конкретного сотрудника
             if (vocations.Any())
             {
@@ -91,15 +90,15 @@ namespace TestWebApplication.Services
         
         private string FindEmployeePosition() //нахождение должности сотрудника
         {
-            return employeeDb.Employees
+            return Db.Employees
                 .FirstOrDefault(x => x.id == vocation.employeeId).position;
         }
 
-        public bool Check(Vocation voc, EmployeeContext employeeContext, VocationContext vocationContext) //проверка возможности оформления отпуска
+        public bool Check(Vocation voc, ApplicationContext Context) //, VocationContext vocationContext) //проверка возможности оформления отпуска
         {
             vocation = voc;
-            employeeDb = employeeContext;
-            vocationDb = vocationContext;
+            Db = Context;
+            //vocationDb = vocationContext;
             if ((CheckValidDate())
                 && (CheckDaysPerYear())) 
             {

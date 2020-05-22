@@ -12,16 +12,16 @@ namespace TestWebApplication.Controllers
     [Route("/vocation")]
     public class VocationController : ControllerBase
     {
-        VocationContext vocationDb;
-        EmployeeContext employeeDb;
+        //VocationContext vocationDb;
+        ApplicationContext Db;
         AddVocationCheckService addService;
-        public VocationController(VocationContext vocationContext, EmployeeContext employeeContext, AddVocationCheckService service)
+        public VocationController(/*VocationContext vocationContext,*/ ApplicationContext employeeContext, AddVocationCheckService service)
         {
-            vocationDb = vocationContext;
-            employeeDb = employeeContext;
+            //vocationDb = vocationContext;
+            Db = employeeContext;
             addService = service;
-            vocationDb.SaveChanges();
-            employeeDb.SaveChanges();
+            //vocationDb.SaveChanges();
+            //Db.SaveChanges();
         }
 
         [HttpGet]
@@ -29,7 +29,7 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                return await vocationDb.Vocations.ToListAsync();
+                return await Db.Vocations.ToListAsync();
 
             }
             catch
@@ -43,7 +43,7 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                Vocation vocation = vocationDb.Vocations.FirstOrDefault(x => x.id == id);
+                Vocation vocation = Db.Vocations.FirstOrDefault(x => x.id == id);
                 return vocation;
             }
             catch
@@ -60,10 +60,10 @@ namespace TestWebApplication.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (addService.Check(vocation, employeeDb, vocationDb))
+                    if (addService.Check(vocation, Db))//, vocationDb))
                     {
-                        vocationDb.Vocations.Add(vocation);
-                        await vocationDb.SaveChangesAsync();
+                        Db.Vocations.Add(vocation);
+                        await Db.SaveChangesAsync();
                         return Ok(vocation);
                     }
                     else
@@ -87,8 +87,8 @@ namespace TestWebApplication.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    vocationDb.Update(vocation);
-                    await vocationDb.SaveChangesAsync();
+                    Db.Update(vocation);
+                    await Db.SaveChangesAsync();
                     return Ok(vocation);
                 }
                 return BadRequest(ModelState);
@@ -104,11 +104,11 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                Vocation vocation = vocationDb.Vocations.FirstOrDefault(x => x.id == id);
+                Vocation vocation = Db.Vocations.FirstOrDefault(x => x.id == id);
                 if (vocation != null)
                 {
-                    vocationDb.Vocations.Remove(vocation);
-                    await vocationDb.SaveChangesAsync();
+                    Db.Vocations.Remove(vocation);
+                    await Db.SaveChangesAsync();
                 }
                 return Ok(vocation);
             }

@@ -21,16 +21,15 @@ namespace TestWebApplication
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            string employeeConnectionString = "Server=(localdb)\\mssqllocaldb;Database=testingsdb;Trusted_Connection=True;";
-            string vocationConnectionString = "Server=(localdb)\\mssqllocaldb;Database=vocationtestingsdb;Trusted_Connection=True;";
-
+            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=qwerty;Trusted_Connection=True;";
+            //string vocationConnectionString = "Server=(localdb)\\mssqllocaldb;Database=vocDbne;Trusted_Connection=True;MultipleActiveResultSets=true;";
+            //MultipleActiveResultSets=true;
             services.AddControllersWithViews();
+            
+            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
+            //services.AddDbContext<VocationContext>(options => options.UseSqlServer(vocationConnectionString));
 
-            services.AddDbContext<EmployeeContext>(options => options.UseSqlServer(employeeConnectionString));
-            services.AddDbContext<VocationContext>(options => options.UseSqlServer(vocationConnectionString));
-
-            services.AddTransient<AddVocationCheckService>()
-                ;
+            services.AddTransient<AddVocationCheckService>();
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
@@ -39,7 +38,6 @@ namespace TestWebApplication
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

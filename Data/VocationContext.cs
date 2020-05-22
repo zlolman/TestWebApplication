@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/*
+using Microsoft.EntityFrameworkCore;
 using TestWebApplication.Models;
 
 namespace TestWebApplication.Data
@@ -8,9 +9,8 @@ namespace TestWebApplication.Data
         public VocationContext(DbContextOptions<VocationContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
         }
 
         public DbSet<Vocation> Vocations { get; set; }
     }
-}
+}*/
