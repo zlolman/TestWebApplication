@@ -12,13 +12,11 @@ namespace TestWebApplication.Controllers
     [Route("/vocation")]
     public class VocationController : ControllerBase
     {
-        private readonly ApplicationContext Db;
         private readonly IDataRepository<Vocation> repo;
         AddVocationCheckService addService;
 
-        public VocationController(ApplicationContext employeeContext, AddVocationCheckService service, IDataRepository<Vocation> _repo)
+        public VocationController(AddVocationCheckService service, IDataRepository<Vocation> _repo)
         {
-            Db = employeeContext;
             addService = service;
             repo = _repo;
         }
@@ -73,7 +71,7 @@ namespace TestWebApplication.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                if (addService.Check(vocation, Db))
+                if (addService.Check(vocation))
                 {
                     repo.Add(vocation);
                     var save = await repo.SaveAsync(vocation);
@@ -121,11 +119,10 @@ namespace TestWebApplication.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var vocation = await Db.Vocations.FindAsync(id);
+                var vocation = await repo.Get(id);
 
                 if (vocation != null)
                 {
-                    //Db.Vocations.Remove(vocation);
                     repo.Delete(vocation);
                     var save = await repo.SaveAsync(vocation);
 
@@ -134,8 +131,7 @@ namespace TestWebApplication.Controllers
                 else 
                 {
                     return NotFound();
-                }
-                
+                }                
             }
             catch
             {

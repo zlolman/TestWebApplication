@@ -10,10 +10,13 @@ namespace TestWebApplication.Services
     public class AddVocationCheckService
     {
         private Vocation vocation;
-        private ApplicationContext Db;
+        private static ApplicationContext Db;
 
         const int MAX_DAYS_PER_YEAR = 28;
         const int SIMILAR_EMPLOYEE = 9999;
+        public static void DbInit(ApplicationContext context) {
+            Db = context;
+        }
         private bool CheckValidDate() //проверка данных отпуска, startData < endDate, startDat >= today
         {
             DateTime today = DateTime.Today;
@@ -72,18 +75,22 @@ namespace TestWebApplication.Services
                 int diffInDays = 0;
                 vocations = vocations
                     .Where(voc => voc.startDate.Year == vocation.startDate.Year);
+
                 foreach (var voc in vocations)
                 {
                     TimeSpan diff = voc.endDate - voc.startDate;
                     diffInDays += diff.Days;
                 }
+
                 TimeSpan difference = vocation.endDate - vocation.startDate;
                 diffInDays += difference.Days;
+
                 return (diffInDays <= MAX_DAYS_PER_YEAR) ? true : false;
             }
             else
             {
                 TimeSpan difference = vocation.endDate - vocation.startDate;
+
                 return (difference.Days <= MAX_DAYS_PER_YEAR) ? true : false;
             }
 
@@ -95,17 +102,19 @@ namespace TestWebApplication.Services
                 .FirstOrDefault(x => x.id == vocation.employeeId).position;
         }
 
-        public bool Check(Vocation voc, ApplicationContext Context) //проверка возможности оформления отпуска
+        public bool Check(Vocation voc)//, ApplicationContext Context) //проверка возможности оформления отпуска
         {
             vocation = voc;
-            Db = Context;
-            //vocationDb = vocationContext;
+            
             if ((CheckValidDate())
                 && (CheckDaysPerYear()))
             {
                 int devCount = CountVocations("Dev"); //подсчет количества пересекающихся по датам отпусков для позиции "Dev"
+
                 int qaCount = CountVocations("QA");  //подсчет количества пересекающихся по датам отпусков для позиции "QA"
+
                 int tlCount = CountVocations("TeamLead");   //подсчет количества пересекающихся по датам отпусков для позиции "TeamLead"
+
                 switch (FindEmployeePosition())
                 {
                     case "Dev":

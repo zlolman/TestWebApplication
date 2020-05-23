@@ -28,7 +28,7 @@ namespace TestWebApplication
 
             services.AddScoped(typeof(IDataRepository<>), typeof(DataRepository<>));
 
-            services.AddTransient<AddVocationCheckService>();
+            services.AddSingleton<AddVocationCheckService>();
 
             services.AddSpaStaticFiles(configuration =>
             {
@@ -37,7 +37,7 @@ namespace TestWebApplication
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
+        {         
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

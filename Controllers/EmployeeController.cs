@@ -12,12 +12,12 @@ namespace TestWebApplication.Controllers
     [Route("/employee")]
     public class EmployeeController : ControllerBase
     {
-        private readonly ApplicationContext Db;
-        private readonly IDataRepository<Employee> repo;
-        public EmployeeController(ApplicationContext context, IDataRepository<Employee> _repo)
+        private readonly IDataRepository<Employee> employeeRepo;
+        private readonly IDataRepository<Vocation> vocationRepo;
+        public EmployeeController(ApplicationContext context, IDataRepository<Employee> _repo, IDataRepository<Vocation> _repoVoc)
         {
-            Db = context;
-            repo = _repo;
+            employeeRepo = _repo;
+            vocationRepo = _repoVoc;
         }
 
         [HttpGet]
@@ -25,7 +25,7 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                return Ok(await repo.GetAll());
+                return Ok(await employeeRepo.GetAll());
             }
             catch
             {
@@ -44,7 +44,7 @@ namespace TestWebApplication.Controllers
                     return BadRequest(ModelState);
                 };
 
-                var employee = await repo.Get(id);
+                var employee = await employeeRepo.Get(id);
 
                 if (employee == null)
                 {
@@ -70,8 +70,8 @@ namespace TestWebApplication.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                repo.Add(employee);
-                var save = await repo.SaveAsync(employee);
+                employeeRepo.Add(employee);
+                var save = await employeeRepo.SaveAsync(employee);
 
                 return Ok(employee);
             }
@@ -91,8 +91,8 @@ namespace TestWebApplication.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                repo.Update(employee);
-                var save = await repo.SaveAsync(employee);
+                employeeRepo.Update(employee);
+                var save = await employeeRepo.SaveAsync(employee);
 
                 return Ok(employee);
             }
@@ -112,20 +112,20 @@ namespace TestWebApplication.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var employee = await Db.Employees.FindAsync(id);
+                var employee = await employeeRepo.Get(id);
 
                 if (employee != null)
                 {
-                    List<Vocation> vocations = new List<Vocation>();
-                    vocations.AddRange(Db.Vocations.Where(voc => voc.employeeId == employee.id));
-                    repo.Delete(employee);
+                    IEnumerable<Vocation> vocations = await vocationRepo.GetAll();
+                    vocations = vocations.Where(voc => voc.employeeId == employee.id);
+                    employeeRepo.Delete(employee);
 
-                    foreach (Vocation voc in vocations)
+                    foreach (var voc in vocations)
                     {
-                        Db.Vocations.Remove(voc);
+                        vocationRepo.Delete(voc);
                     }
 
-                    var save = await repo.SaveAsync(employee);
+                    var save = await employeeRepo.SaveAsync(employee);
 
                     return Ok(employee);
                 }

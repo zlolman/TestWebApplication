@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TestWebApplication.Models;
+using TestWebApplication.Services;
 
 namespace TestWebApplication.Data
 {
@@ -9,6 +10,7 @@ namespace TestWebApplication.Data
             : base(options)
         {
             Database.Migrate();
+            AddVocationCheckService.DbInit(this);
         }
 
         public DbSet<Employee> Employees { get; set; }
