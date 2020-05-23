@@ -26,7 +26,10 @@ namespace TestWebApplication
 
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
 
+            services.AddScoped(typeof(IDataRepository<>), typeof(DataRepository<>));
+
             services.AddTransient<AddVocationCheckService>();
+
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";

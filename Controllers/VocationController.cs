@@ -12,12 +12,15 @@ namespace TestWebApplication.Controllers
     [Route("/vocation")]
     public class VocationController : ControllerBase
     {
-        ApplicationContext Db;
+        private readonly ApplicationContext Db;
+        private readonly IDataRepository<Vocation> repo;
         AddVocationCheckService addService;
-        public VocationController(ApplicationContext employeeContext, AddVocationCheckService service)
+
+        public VocationController(ApplicationContext employeeContext, AddVocationCheckService service, IDataRepository<Vocation> _repo)
         {
             Db = employeeContext;
             addService = service;
+            repo = _repo;
         }
 
         [HttpGet]
@@ -25,8 +28,7 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                return await Db.Vocations.ToListAsync();
-
+                return Ok(await repo.GetAll());
             }
             catch
             {
@@ -39,8 +41,21 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                Vocation vocation = Db.Vocations.FirstOrDefault(x => x.id == id);
-                return vocation;
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var vocation = await repo.Get(id);
+
+                if (vocation == null)
+                {
+                    return NotFound();
+                }
+                else 
+                {
+                    return Ok(vocation);
+                }                
             }
             catch
             {
@@ -54,20 +69,20 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                if (!ModelState.IsValid) 
                 {
-                    if (addService.Check(vocation, Db))
-                    {
-                        Db.Vocations.Add(vocation);
-                        await Db.SaveChangesAsync();
-                        return Ok(vocation);
-                    }
-                    else
-                    {
-                        return BadRequest(ModelState);
-                    }
+                    return BadRequest(ModelState);
                 }
-                return BadRequest(ModelState);
+                if (addService.Check(vocation, Db))
+                {
+                    repo.Add(vocation);
+                    var save = await repo.SaveAsync(vocation);
+                    return Ok(vocation);
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
             }
             catch
             {
@@ -81,13 +96,14 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                if (!ModelState.IsValid) 
                 {
-                    Db.Update(vocation);
-                    await Db.SaveChangesAsync();
-                    return Ok(vocation);
+                    return BadRequest(ModelState);
                 }
-                return BadRequest(ModelState);
+                repo.Update(vocation);
+                var save = await repo.SaveAsync(vocation);
+                
+                return Ok(vocation);
             }
             catch
             {
@@ -100,13 +116,26 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                Vocation vocation = Db.Vocations.FirstOrDefault(x => x.id == id);
+                if (!ModelState.IsValid) 
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var vocation = await Db.Vocations.FindAsync(id);
+
                 if (vocation != null)
                 {
-                    Db.Vocations.Remove(vocation);
-                    await Db.SaveChangesAsync();
+                    //Db.Vocations.Remove(vocation);
+                    repo.Delete(vocation);
+                    var save = await repo.SaveAsync(vocation);
+
+                    return Ok(vocation);
                 }
-                return Ok(vocation);
+                else 
+                {
+                    return NotFound();
+                }
+                
             }
             catch
             {
