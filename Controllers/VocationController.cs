@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TestWebApplication.Models;
-using Microsoft.EntityFrameworkCore;
 using TestWebApplication.Data;
+using TestWebApplication.Models;
 using TestWebApplication.Services;
 namespace TestWebApplication.Controllers
 {
@@ -12,16 +12,12 @@ namespace TestWebApplication.Controllers
     [Route("/vocation")]
     public class VocationController : ControllerBase
     {
-        //VocationContext vocationDb;
         ApplicationContext Db;
         AddVocationCheckService addService;
-        public VocationController(/*VocationContext vocationContext,*/ ApplicationContext employeeContext, AddVocationCheckService service)
+        public VocationController(ApplicationContext employeeContext, AddVocationCheckService service)
         {
-            //vocationDb = vocationContext;
             Db = employeeContext;
             addService = service;
-            //vocationDb.SaveChanges();
-            //Db.SaveChanges();
         }
 
         [HttpGet]
@@ -60,7 +56,7 @@ namespace TestWebApplication.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (addService.Check(vocation, Db))//, vocationDb))
+                    if (addService.Check(vocation, Db))
                     {
                         Db.Vocations.Add(vocation);
                         await Db.SaveChangesAsync();

@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TestWebApplication.Models;
 using TestWebApplication.Data;
+using TestWebApplication.Models;
 
 namespace TestWebApplication.Controllers
 {
@@ -13,12 +13,9 @@ namespace TestWebApplication.Controllers
     public class EmployeeController : ControllerBase
     {
         ApplicationContext Db;
-        //VocationContext vocationDb;
-        public EmployeeController(ApplicationContext context)//, VocationContext vocationContext)
+        public EmployeeController(ApplicationContext context)
         {
             Db = context;
-            //vocationDb = vocationContext;
-
         }
 
         [HttpGet]
@@ -58,7 +55,6 @@ namespace TestWebApplication.Controllers
                 if (ModelState.IsValid)
                 {
                     Db.Employees.Add(employee);
-                    //db.SaveChanges();
                     await Db.SaveChangesAsync();
                     return Ok(employee);
                 }
@@ -107,8 +103,6 @@ namespace TestWebApplication.Controllers
                         Db.Vocations.Remove(voc);
                     }
                     await Db.SaveChangesAsync();
-                    //await employeeDb.SaveChangesAsync();
-
                 }
                 return Ok(employee);
             }

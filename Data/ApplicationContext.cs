@@ -8,7 +8,6 @@ namespace TestWebApplication.Data
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {
-            //Database.EnsureCreated();
             Database.Migrate();
         }
 

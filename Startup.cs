@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TestWebApplication.Models;
 using TestWebApplication.Data;
 using TestWebApplication.Services;
 
@@ -21,13 +20,11 @@ namespace TestWebApplication
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=qwerty;Trusted_Connection=True;MultipleActiveResultSets=true;";
-            //string vocationConnectionString = "Server=(localdb)\\mssqllocaldb;Database=vocDbne;Trusted_Connection=True;MultipleActiveResultSets=true;";
-            //MultipleActiveResultSets=true;
+            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=AppBase;Trusted_Connection=True;MultipleActiveResultSets=true;";
+
             services.AddControllersWithViews();
-            
+
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
-            //services.AddDbContext<VocationContext>(options => options.UseSqlServer(vocationConnectionString));
 
             services.AddTransient<AddVocationCheckService>();
             services.AddSpaStaticFiles(configuration =>

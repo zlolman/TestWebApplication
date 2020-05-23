@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TestWebApplication.Models;
 using TestWebApplication.Data;
+using TestWebApplication.Models;
 
 
 namespace TestWebApplication.Services
@@ -11,12 +11,13 @@ namespace TestWebApplication.Services
     {
         private Vocation vocation;
         private ApplicationContext Db;
-        //private VocationContext vocationDb;
+
         const int MAX_DAYS_PER_YEAR = 28;
+        const int SIMILAR_EMPLOYEE = 9999;
         private bool CheckValidDate() //проверка данных отпуска, startData < endDate, startDat >= today
         {
             DateTime today = DateTime.Today;
-            if ((DateTimeOffset.Compare(vocation.startDate, today) >= 0) 
+            if ((DateTimeOffset.Compare(vocation.startDate, today) >= 0)
                 && (DateTimeOffset.Compare(vocation.endDate, vocation.startDate) > 0)
                 && (vocation.startDate.Year == vocation.endDate.Year))
             {
@@ -41,12 +42,12 @@ namespace TestWebApplication.Services
                 }
                 foreach (var voc in vocations)
                 {
-                    if ((DateTimeOffset.Compare(vocation.endDate, voc.startDate) >= 0) 
-                        && (DateTimeOffset.Compare(vocation.startDate, voc.endDate) <= 0)) 
+                    if ((DateTimeOffset.Compare(vocation.endDate, voc.startDate) >= 0)
+                        && (DateTimeOffset.Compare(vocation.startDate, voc.endDate) <= 0))
                     {
                         if (vocation.employeeId == voc.employeeId)
                         {
-                            count = 10;
+                            count = SIMILAR_EMPLOYEE;
                         }
                         else
                         {
@@ -73,7 +74,7 @@ namespace TestWebApplication.Services
                     .Where(voc => voc.startDate.Year == vocation.startDate.Year);
                 foreach (var voc in vocations)
                 {
-                    TimeSpan diff = voc.endDate - voc.startDate;  
+                    TimeSpan diff = voc.endDate - voc.startDate;
                     diffInDays += diff.Days;
                 }
                 TimeSpan difference = vocation.endDate - vocation.startDate;
@@ -87,20 +88,20 @@ namespace TestWebApplication.Services
             }
 
         }
-        
+
         private string FindEmployeePosition() //нахождение должности сотрудника
         {
             return Db.Employees
                 .FirstOrDefault(x => x.id == vocation.employeeId).position;
         }
 
-        public bool Check(Vocation voc, ApplicationContext Context) //, VocationContext vocationContext) //проверка возможности оформления отпуска
+        public bool Check(Vocation voc, ApplicationContext Context) //проверка возможности оформления отпуска
         {
             vocation = voc;
             Db = Context;
             //vocationDb = vocationContext;
             if ((CheckValidDate())
-                && (CheckDaysPerYear())) 
+                && (CheckDaysPerYear()))
             {
                 int devCount = CountVocations("Dev"); //подсчет количества пересекающихся по датам отпусков для позиции "Dev"
                 int qaCount = CountVocations("QA");  //подсчет количества пересекающихся по датам отпусков для позиции "QA"
