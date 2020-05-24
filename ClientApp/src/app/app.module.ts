@@ -12,6 +12,7 @@ import { VocationComponent } from './vocation/vocation.component';
 import { VocationCreate } from './vocation/vocation-create.component';
 import { BadRequestVocation } from './vocation/badrequest.component';
 import { BadRequestEmployee } from './employee/badrequest'
+
 @NgModule({ 
   declarations: [
     AppComponent,

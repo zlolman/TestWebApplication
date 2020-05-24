@@ -92,18 +92,11 @@ namespace TestWebApplication.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var voc = await repo.Get(vocation.id);
-                if (voc != null)
-                {
-                    repo.Update(vocation);
-                    var save = await repo.SaveAsync(vocation);
 
-                    return Ok(vocation);
-                }
-                else 
-                {
-                    return NotFound();
-                }        
+                repo.Update(vocation);
+                var save = await repo.SaveAsync(vocation);
+
+                return Ok(vocation);
             }
             catch
             {

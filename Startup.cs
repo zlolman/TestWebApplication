@@ -37,8 +37,9 @@ namespace TestWebApplication
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {         
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationContext context)
+        {
+            context.Database.Migrate();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -48,8 +49,7 @@ namespace TestWebApplication
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-
-            app.UseCors("CorsPolicy");
+                        
             app.UseStaticFiles();
             if (!env.IsDevelopment())
             {
@@ -74,7 +74,7 @@ namespace TestWebApplication
                 {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
-            });
+            });            
         }
     }
 }

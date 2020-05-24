@@ -11,6 +11,7 @@ namespace TestWebApplication.Data
         public DataRepository(ApplicationContext context)
         {
             _context = context;
+            //_context.Database.EnsureCreatedAsync();
         }
 
         public async Task<IEnumerable<T>> GetAll() {

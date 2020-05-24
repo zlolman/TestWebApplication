@@ -88,19 +88,10 @@ namespace TestWebApplication.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var emp = await employeeRepo.Get(employee.id);
+                employeeRepo.Update(employee);
+                var save = await employeeRepo.SaveAsync(employee);
 
-                if (emp != null)
-                {
-                    employeeRepo.Update(employee);
-                    var save = await employeeRepo.SaveAsync(employee);
-
-                    return Ok(employee);
-                }
-                else 
-                {
-                    return NotFound();
-                }          
+                return Ok(employee);
             }
             catch
             {
