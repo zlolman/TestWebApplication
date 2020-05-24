@@ -102,11 +102,16 @@ namespace TestWebApplication.Services
                 .FirstOrDefault(x => x.id == vocation.employeeId).position;
         }
 
+        private bool EmployeeExist()
+        {
+            return (Db.Employees.FirstOrDefault(x => x.id == vocation.employeeId) != null) ? true : false;
+        }
         public bool Check(Vocation voc)//, ApplicationContext Context) //проверка возможности оформления отпуска
         {
             vocation = voc;
             
-            if ((CheckValidDate())
+            if ((EmployeeExist())
+                && (CheckValidDate())
                 && (CheckDaysPerYear()))
             {
                 int devCount = CountVocations("Dev"); //подсчет количества пересекающихся по датам отпусков для позиции "Dev"
