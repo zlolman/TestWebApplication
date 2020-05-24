@@ -36,6 +36,7 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\employee\badrequest.component.ts" />
     <None Remove="ClientApp\src\app\employee\badrequest.ts" />
+    <None Remove="ClientApp\src\app\employee\create\employee-create.component.ts" />
     <None Remove="ClientApp\src\app\employee\employee.component.ts" />
     <None Remove="ClientApp\src\app\employee\employee.data.service.ts" />
     <None Remove="ClientApp\src\app\employee\employee.ts" />
@@ -46,12 +47,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\employee\badrequest.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\vocation\badrequest.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\employee\badrequest\badrequest.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\employee\create\employee-create.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\vocation\badrequest\badrequest.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\employee\employee.data.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\employee\employee.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\employee\employee.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\vocation\vocation-create.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\vocation\create\vocation-create.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\vocation\vocation.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\vocation\vocation.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\vocation\vocation.data.service.ts" />

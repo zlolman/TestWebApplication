@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Vocation } from './vocation';
-import { VocationDataService } from './vocation.data.service';
+import { Vocation } from '../vocation';
+import { VocationDataService } from '../vocation.data.service';
 
 @Component({
   templateUrl: './vocation-create.component.html',
@@ -10,12 +10,13 @@ import { VocationDataService } from './vocation.data.service';
 export class VocationCreate {
   vocation: Vocation = new Vocation();
 
-  constructor(private router: Router, private vocationService: VocationDataService, private activeRoute: ActivatedRoute) {
+  constructor(private router: Router, private vocationService: VocationDataService, private activeRoute: ActivatedRoute)
+  {
     this.vocation.employeeId = Number.parseInt(activeRoute.snapshot.params["id"]);
   };
 
-
-  save() {
+  save()
+  {
     this.vocationService.createVocation(this.vocation).subscribe(data => {
       this.vocation = data;
       if (data != null) {
