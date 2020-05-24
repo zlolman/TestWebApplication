@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'bad-request-component',
   templateUrl: './badrequest.component.html',
 })
-export class BadRequest
+export class BadRequestVocation
 {
 
 }

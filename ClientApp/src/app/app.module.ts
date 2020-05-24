@@ -10,8 +10,9 @@ import { HomeComponent } from './home/home.component';
 import { EmployeeComponent } from './employee/employee.component';
 import { VocationComponent } from './vocation/vocation.component';
 import { VocationCreate } from './vocation/vocation-create.component';
-import { BadRequest } from './vocation/badrequest.component'
-@NgModule({
+import { BadRequestVocation } from './vocation/badrequest.component';
+import { BadRequestEmployee } from './employee/badrequest'
+@NgModule({ 
   declarations: [
     AppComponent,
     NavMenuComponent,
@@ -19,7 +20,8 @@ import { BadRequest } from './vocation/badrequest.component'
     EmployeeComponent,
     VocationComponent,
     VocationCreate,
-    BadRequest
+    BadRequestVocation,
+    BadRequestEmployee 
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -30,7 +32,8 @@ import { BadRequest } from './vocation/badrequest.component'
       { path: 'employee', component: EmployeeComponent, pathMatch: 'full' },
       { path: 'vocation', component: VocationComponent, pathMatch: 'full' },
       { path: 'vocation/create/:id', component: VocationCreate, pathMatch: 'full' },
-      { path: 'vocation/error', component: BadRequest, pathMatch: 'full'}
+      { path: 'vocation/error', component: BadRequestVocation, pathMatch: 'full' },
+      { path: 'employee/error', component: BadRequestEmployee, pathMatch: 'full' }
     ], { useHash: true })
   ],
   providers: [],

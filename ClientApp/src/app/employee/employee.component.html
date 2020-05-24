@@ -30,17 +30,23 @@
 
 <!--шаблон для редактирования-->
 <ng-template #edit>
-
   <td>
-    <input type="text" [(ngModel)]="employee.name" class="form-control" />
   </td>
   <td>
-    <select class="form-control" name="position"
-            [(ngModel)]="employee.position" #positionCompany="ngModel">
+    <input type="text" [(ngModel)]="employee.name" #name="ngModel" class="form-control" required />    
+    <div [hidden]="name.valid || name.untouched" class="alert alert-danger">
+      Не указано имя
+    </div>
+  </td>
+  <td>
+    <select type="text" class="form-control" [(ngModel)]="employee.position" #position="ngModel" required>
       <option *ngFor="let pos of positions" [value]="pos">
         {{pos}}
       </option>
     </select>
+    <div [hidden]="position.valid || position.untouched" class="alert alert-danger">
+      Не указана позиция
+    </div>
   </td>
   <td>
     <input type="button" value="Сохранить" (click)="save()" class="btn btn-sm btn-success" />
@@ -53,19 +59,21 @@
 <ng-template #create>
   <div class="form-group">
     <label>Имя</label>
-    <input type="text" name="name" [(ngModel)]="employee.name" class="form-control" #name="ngModel" required />
+    <input type="text" [(ngModel)]="employee.name" class="form-control" #name="ngModel" required />
     <div [hidden]="name.valid || name.untouched" class="alert alert-danger">
       Не указано имя
     </div>
   </div>
   <div class="form-group">
     <label>Позиция</label>
-    <select class="form-control" name="position"
-            [(ngModel)]="employee.position" #positionCompany="ngModel">
+    <select class="form-control" name="position" [(ngModel)]="employee.position" #position="ngModel">
       <option *ngFor="let pos of positions" [value]="pos">
         {{pos}}
       </option>
     </select>
+    <div [hidden]="position.valid || position.untouched" class="alert alert-danger">
+      Не указана позиция
+    </div>
   </div>
   <div>
     <input type="button" value="Сохранить" (click)="save()" class="btn btn-success" />

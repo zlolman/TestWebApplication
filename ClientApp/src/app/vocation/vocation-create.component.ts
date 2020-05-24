@@ -9,8 +9,6 @@ import { VocationDataService } from './vocation.data.service';
 })
 export class VocationCreate {
   vocation: Vocation = new Vocation();
-  loaded: boolean;
-  //response: HttpResponse<Vocation>;
 
   constructor(private router: Router, private vocationService: VocationDataService, private activeRoute: ActivatedRoute) {
     this.vocation.employeeId = Number.parseInt(activeRoute.snapshot.params["id"]);
