@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace TestWebApplication.Controllers
     {
         private readonly IDataRepository<Employee> employeeRepo;
         private readonly IDataRepository<Vocation> vocationRepo;
-        public EmployeeController(ApplicationContext context, IDataRepository<Employee> _repo, IDataRepository<Vocation> _repoVoc)
+        public EmployeeController(IDataRepository<Employee> _repo, IDataRepository<Vocation> _repoVoc)
         {
             employeeRepo = _repo;
             vocationRepo = _repoVoc;
@@ -38,12 +39,7 @@ namespace TestWebApplication.Controllers
         public async Task<ActionResult<Employee>> Get(int id)
         {
             try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                };
-
+            {                
                 var employee = await employeeRepo.Get(id);
 
                 if (employee == null)
@@ -66,10 +62,11 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                if ((string.IsNullOrEmpty(employee.name)) || (string.IsNullOrEmpty(employee.position)))
                 {
                     return BadRequest(ModelState);
                 }
+
                 employeeRepo.Add(employee);
                 var save = await employeeRepo.SaveAsync(employee);
 
@@ -87,14 +84,23 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                if ((string.IsNullOrEmpty(employee.name)) || (string.IsNullOrEmpty(employee.position)))
                 {
                     return BadRequest(ModelState);
                 }
-                employeeRepo.Update(employee);
-                var save = await employeeRepo.SaveAsync(employee);
+                var emp = await employeeRepo.Get(employee.id);
 
-                return Ok(employee);
+                if (emp != null)
+                {
+                    employeeRepo.Update(employee);
+                    var save = await employeeRepo.SaveAsync(employee);
+
+                    return Ok(employee);
+                }
+                else 
+                {
+                    return NotFound();
+                }          
             }
             catch
             {
@@ -107,15 +113,10 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
                 var employee = await employeeRepo.Get(id);
 
                 if (employee != null)
-                {
+                {                    
                     IEnumerable<Vocation> vocations = await vocationRepo.GetAll();
                     vocations = vocations.Where(voc => voc.employeeId == employee.id);
                     employeeRepo.Delete(employee);

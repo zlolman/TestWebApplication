@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,11 +40,6 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
                 var vocation = await repo.Get(id);
 
                 if (vocation == null)
@@ -66,11 +62,7 @@ namespace TestWebApplication.Controllers
         public async Task<ActionResult<Vocation>> Post(Vocation vocation)
         {
             try
-            {
-                if (!ModelState.IsValid) 
-                {
-                    return BadRequest(ModelState);
-                }
+            {                
                 if (addService.Check(vocation))
                 {
                     repo.Add(vocation);
@@ -94,14 +86,24 @@ namespace TestWebApplication.Controllers
         {
             try
             {
-                if (!ModelState.IsValid) 
+                if ((DateTimeOffset.Compare(vocation.startDate,DateTimeOffset.MinValue) == 0) 
+                    || (DateTimeOffset.Compare(vocation.startDate, DateTimeOffset.MinValue) == 0)
+                    || (vocation.employeeId == 0))
                 {
                     return BadRequest(ModelState);
                 }
-                repo.Update(vocation);
-                var save = await repo.SaveAsync(vocation);
-                
-                return Ok(vocation);
+                var voc = await repo.Get(vocation.id);
+                if (voc != null)
+                {
+                    repo.Update(vocation);
+                    var save = await repo.SaveAsync(vocation);
+
+                    return Ok(vocation);
+                }
+                else 
+                {
+                    return NotFound();
+                }        
             }
             catch
             {
@@ -113,12 +115,7 @@ namespace TestWebApplication.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             try
-            {
-                if (!ModelState.IsValid) 
-                {
-                    return BadRequest(ModelState);
-                }
-
+            {                
                 var vocation = await repo.Get(id);
 
                 if (vocation != null)

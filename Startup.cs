@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TestWebApplication.Data;
 using TestWebApplication.Services;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
 
 namespace TestWebApplication
 {
@@ -22,7 +23,7 @@ namespace TestWebApplication
         {
             string connectionString = "Server=(localdb)\\mssqllocaldb;Database=AppBase;Trusted_Connection=True;MultipleActiveResultSets=true;";
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews();         
 
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connectionString));
 
@@ -48,6 +49,7 @@ namespace TestWebApplication
                 app.UseHsts();
             }
 
+            app.UseCors("CorsPolicy");
             app.UseStaticFiles();
             if (!env.IsDevelopment())
             {
