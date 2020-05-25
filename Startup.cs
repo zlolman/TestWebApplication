@@ -65,7 +65,7 @@ namespace TestWebApplication
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
-
+            
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
@@ -74,7 +74,7 @@ namespace TestWebApplication
                 {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
-            });            
+            });          
         }
     }
 }
